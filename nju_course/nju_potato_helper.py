@@ -172,10 +172,10 @@ def get_fav_list():
     return r
 
 
-def clear_status():
+def clear_status(classId):
     r = session.post(
         "https://xk.nju.edu.cn/xsxkapp/sys/xsxkapp/elective/studentstatus.do",
-        data={"studentCode": STUDENT_NUMBER, "type": "1"},
+        data={"studentCode": STUDENT_NUMBER, "type": "1", "teachingClassId": classId},
     )
     return r.json()
 
@@ -205,7 +205,7 @@ def grab_class(data):
         print(r.text)
         print("Request Done Time: " + r.headers["Date"])
 
-        r = clear_status()
+        r = clear_status(data["teachingClassID"])
         print(r)
         grab_sleep_()
 
@@ -215,7 +215,6 @@ def grab_class(data):
 
 if __name__ == "__main__":
     session = get_session()
-    clear_status()
 
     if FORCE_INTERNAL_LIST:
         sync_fav_list()
