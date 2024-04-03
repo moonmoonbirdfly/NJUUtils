@@ -22,13 +22,13 @@ logging.basicConfig(
 DEVICE_CONSTANTS = {
     "mobileDeviceId": str(uuid.uuid4()),
     "mobileModel": "",
-    "mobileOsVersion": "12",
+    "mobileOsVersion": "14",
     "ostype": "3",
-    "version": "927",
-    "versionName": "9.0.27",
+    "version": "932",
+    "versionName": "9.0.32",
     "token": "",
-    "studentNum": "211250000",
-    "uid": "1000123",
+    "studentNum": "221830013",
+    "uid": "1003120",
 }
 
 SIGN_KEY = "rDJiNB9j7vD2"
@@ -151,18 +151,18 @@ def do_upload(content_type, data=None):
 
 def fake_run():
     r = do_request("/User/User")
-    logging.info("当前用户信息: " + str(r))
+    logging.info("当前用户信息: " + str(r)+"\n")
 
-    logging.info("开始赛博跑步...")
+    logging.info("开始赛博跑步..."+"\n")
     r = do_request("/Run2/beforeRunV260")
-    logging.info("请求 beforeRun: " + str(r))
+    logging.info("请求 beforeRun: " + str(r)+"\n")
 
     r = do_request("/Run/getTimestampV278")
-    logging.info("请求 getTimestamp: " + str(r))
+    logging.info("请求 getTimestamp: " + str(r)+"\n")
     record_str = r["str"]
-    logging.info("得到 record str: " + record_str)
+    logging.info("得到 record str: " + record_str+"\n")
 
-    logging.info("=====生成数据中=====")
+    logging.info("=====生成数据中====="+"\n")
 
     c_list = [random.randint(300, 350) for _ in range(3)]
     b_list = [
@@ -186,14 +186,14 @@ def fake_run():
     distance_real = sum(b_list)
     distance = str(round(distance_real, 2))
 
-    logging.info("开始时间: " + start_time)
-    logging.info("结束时间: " + end_time)
-    logging.info("持续时间: " + str(duration))
-    logging.info("步频数据: " + str(fake_step_list))
-    logging.info("总步数: " + str(total_steps))
-    logging.info("距离: " + distance + " km")
-    logging.info("配速: " + str(c_list))
-    logging.info("公里数: " + str(b_list))
+    logging.info("开始时间: " + start_time+"\n")
+    logging.info("结束时间: " + end_time+"\n")
+    logging.info("持续时间: " + str(duration)+"\n")
+    logging.info("步频数据: " + str(fake_step_list)+"\n")
+    logging.info("总步数: " + str(total_steps)+"\n")
+    logging.info("距离: " + distance + " km"+"\n")
+    logging.info("配速: " + str(c_list)+"\n")
+    logging.info("公里数: " + str(b_list)+"\n")
 
     fake_location_info = json.load(open("ref_location.json", "r"))
 
@@ -227,9 +227,9 @@ def fake_run():
 
     fake_pic = random_crop(fake_pic)
 
-    logging.info("位置上报数据点: " + str(len(fake_location_info)))
-    logging.info("截图大小: " + str(len(fake_pic)) + " bytes")
-    logging.info("=====生成数据完成=====")
+    logging.info("位置上报数据点: " + str(len(fake_location_info))+"\n")
+    logging.info("截图大小: " + str(len(fake_pic)) + " bytes"+"\n")
+    logging.info("=====生成数据完成====="+"\n")
 
     for i in range(random.randint(8, 15)):
         random_rec = random.choice(fake_location_info)
@@ -238,9 +238,9 @@ def fake_run():
             "longitude": round(random_rec["o"], 6),
         }
         # do_request("/Run/setRunLocationRecord", params=params)
-        logging.info("位置上报: " + str(params))
+        logging.info("位置上报: " + str(params)+"\n")
 
-    logging.info("上传数据: 记录txt")
+    logging.info("上传数据: 记录txt"+"\n")
     txt_path = do_upload(
         "text/plain",
         BytesIO(
@@ -249,10 +249,10 @@ def fake_run():
             ).encode()
         ),
     )
-    logging.info("上传成功: " + txt_path)
-    logging.info("上传数据: 截图")
+    logging.info("上传成功: " + txt_path+"\n")
+    logging.info("上传数据: 截图"+"\n")
     pic_path = do_upload("image/png", fake_pic)
-    logging.info("上传成功: " + pic_path)
+    logging.info("上传成功: " + pic_path+"\n")
 
     # TODO: 时间模拟
     # TODO: 更好的轨迹文件生成与图片生成
@@ -284,16 +284,16 @@ def fake_run():
         }
     )
 
-    logging.info("请求构造: " + json.dumps(params))
+    logging.info("请求构造: " + json.dumps(params)+"\n")
 
     r = requests.post(
         API_URL + "/Run/stopRunV278",
         data={"key": aes_encrypt(json.dumps(params).replace(" ", "").encode())},
     )
 
-    logging.info("调用 stopRun: " + str(r.json()))
-    logging.info("结果: " + str(json.loads(aes_decrypt(r.json()["data"]))))
-    logging.info("赛博跑步完成!")
+    logging.info("调用 stopRun: " + str(r.json())+"\n")
+    logging.info("结果: " + str(json.loads(aes_decrypt(r.json()["data"]))))+"\n"
+    logging.info("赛博跑步完成!"+"\n")
 
 
 # print(do_request("/Run2/allRecordList", params={"year": "2023"}))
